@@ -247,7 +247,7 @@ venusbloom.layers.enable(1)
 
 const geometry_3 = new THREE.SphereGeometry(0.2, 64, 32)
 const material_3 = new THREE.MeshPhongMaterial({
-	map: mars_map,
+	map: mars_map
 	// color: 0xde7f56,
 })
 mars = new THREE.Mesh(geometry_3, material_3)
@@ -256,7 +256,7 @@ mars.castShadow = true
 
 const geometry_bloommars = new THREE.SphereGeometry(0.21, 64, 32)
 const material_bloommars = new THREE.MeshBasicMaterial({
-	color: 0xde7f56,
+	color: 0xde7f56, transparent: true 
 })
 var marsbloom = new THREE.Mesh(geometry_bloommars, material_bloommars)
 marsbloom.layers.enable(1)
