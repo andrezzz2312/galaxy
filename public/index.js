@@ -46,15 +46,25 @@ const bloom_parameters = {
 	bloomRadius: 0,
 }
 const parameters = {
+	// count: 100000,
+	// size: 0.01,
+	// radius: 8,
+	// branches: 5,
+	// spin: 1.68,
+	// randomness: 0.23,
+	// randomnessPower: 3.58,
+	// insideColor: '#07e5e9',
+	// outsideColor: '#2f6cf9',
+
 	count: 100000,
 	size: 0.01,
-	radius: 8,
-	branches: 5,
-	spin: 1.68,
-	randomness: 0.23,
-	randomnessPower: 3.58,
-	insideColor: '#07e5e9',
-	outsideColor: '#2f6cf9',
+	radius: 5,
+	branches: 3,
+	spin: 2.68,
+	randomness: 0.2,
+	randomnessPower: 3,
+	insideColor: '#ff6030',
+	outsideColor: '#1b3984',
 }
 
 let geometry = null
@@ -222,7 +232,7 @@ mercury = new THREE.Mesh(geometry_1, material_1)
 //mercury.layers.enable(1)
 mercury.castShadow = true
 
-const geometry_bloommercury = new THREE.SphereGeometry(0.19, 64, 32)
+const geometry_bloommercury = new THREE.SphereGeometry(0.18, 64, 32)
 const material_bloommercury = new THREE.MeshBasicMaterial({
 	color: 0xb8babb,
 })
@@ -238,7 +248,7 @@ venus = new THREE.Mesh(geometry_2, material_2)
 venus.castShadow = true
 //venus.layers.enable(1)
 
-const geometry_bloomvenus = new THREE.SphereGeometry(0.19, 64, 32)
+const geometry_bloomvenus = new THREE.SphereGeometry(0.18, 64, 32)
 const material_bloomvenus = new THREE.MeshBasicMaterial({
 	color: 0xddc9b7,
 })
@@ -247,16 +257,16 @@ venusbloom.layers.enable(1)
 
 const geometry_3 = new THREE.SphereGeometry(0.2, 64, 32)
 const material_3 = new THREE.MeshPhongMaterial({
-	map: mars_map
+	map: mars_map,
 	// color: 0xde7f56,
 })
 mars = new THREE.Mesh(geometry_3, material_3)
 mars.castShadow = true
 //mars.layers.enable(1)
 
-const geometry_bloommars = new THREE.SphereGeometry(0.21, 64, 32)
+const geometry_bloommars = new THREE.SphereGeometry(0.18, 64, 32)
 const material_bloommars = new THREE.MeshBasicMaterial({
-	color: 0xde7f56, transparent: true 
+	color: 0xde7f56,
 })
 var marsbloom = new THREE.Mesh(geometry_bloommars, material_bloommars)
 marsbloom.layers.enable(1)
@@ -271,7 +281,7 @@ jupiter = new THREE.Mesh(geometry_4, material_4)
 jupiter.castShadow = true
 //jupiter.layers.enable(1)
 
-const geometry_bloomjupiter = new THREE.SphereGeometry(0.19, 64, 32)
+const geometry_bloomjupiter = new THREE.SphereGeometry(0.18, 64, 32)
 const material_bloomjupiter = new THREE.MeshBasicMaterial({
 	color: 0xf0e0bf,
 })
@@ -287,7 +297,7 @@ neptune = new THREE.Mesh(geometry_5, material_5)
 neptune.castShadow = true
 //neptune.layers.enable(1)
 
-const geometry_bloomneptune = new THREE.SphereGeometry(0.19, 64, 32)
+const geometry_bloomneptune = new THREE.SphereGeometry(0.18, 64, 32)
 const material_bloomneptune = new THREE.MeshBasicMaterial({
 	color: 0x73bed6,
 })
@@ -556,7 +566,7 @@ function onPointerMove(event) {
 		switch (currentObj.object) {
 			case mars:
 				var bloomfade = new TWEEN.Tween(marsbloom.scale)
-					.to({ x: 2.9, y: 2.9, z: 2.9 }, 1000)
+					.to({ x: 3.3, y: 3.3, z: 3.3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
 					.start()
 
@@ -568,9 +578,12 @@ function onPointerMove(event) {
 					})
 					.start()
 
-				console.log(marsbloom)
 				break
 			case neptune:
+				var bloomfade = new TWEEN.Tween(neptunebloom.scale)
+					.to({ x: 3.3, y: 3.3, z: 3.3 }, 1000)
+					.easing(TWEEN.Easing.Circular.Out)
+					.start()
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
@@ -580,6 +593,10 @@ function onPointerMove(event) {
 					.start()
 				break
 			case venus:
+				var bloomfade = new TWEEN.Tween(venusbloom.scale)
+					.to({ x: 3.3, y: 3.3, z: 3.3 }, 1000)
+					.easing(TWEEN.Easing.Circular.Out)
+					.start()
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
@@ -589,6 +606,10 @@ function onPointerMove(event) {
 					.start()
 				break
 			case jupiter:
+				var bloomfade = new TWEEN.Tween(jupiterbloom.scale)
+					.to({ x: 3.3, y: 3.3, z: 3.3 }, 1000)
+					.easing(TWEEN.Easing.Circular.Out)
+					.start()
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
@@ -598,6 +619,10 @@ function onPointerMove(event) {
 					.start()
 				break
 			case mercury:
+				var bloomfade = new TWEEN.Tween(mercurybloom.scale)
+					.to({ x: 3.3, y: 3.3, z: 3.3 }, 1000)
+					.easing(TWEEN.Easing.Circular.Out)
+					.start()
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
@@ -613,7 +638,7 @@ function onPointerMove(event) {
 				case mars:
 					// a
 					var bloomfade = new TWEEN.Tween(marsbloom.scale)
-						.to({ x: 0.8, y: 0.8, z: 0.8 }, 1000)
+						.to({ x: 1, y: 1, z: 1 }, 1000)
 						.easing(TWEEN.Easing.Circular.Out)
 						.start()
 
@@ -621,13 +646,15 @@ function onPointerMove(event) {
 						.to({ x: 1, y: 1, z: 1 }, 1000)
 						.easing(TWEEN.Easing.Circular.Out)
 						.onComplete(function () {
-							console.log(bloomPass.threeshold)
-
 							// mars.layers.set(0)
 						})
 						.start()
 					break
 				case neptune:
+					var bloomfade = new TWEEN.Tween(neptunebloom.scale)
+						.to({ x: 1, y: 1, z: 1 }, 1000)
+						.easing(TWEEN.Easing.Circular.Out)
+						.start()
 					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 						.to({ x: 1, y: 1, z: 1 }, 1000)
 						.easing(TWEEN.Easing.Circular.Out)
@@ -637,6 +664,10 @@ function onPointerMove(event) {
 						.start()
 					break
 				case venus:
+					var bloomfade = new TWEEN.Tween(venusbloom.scale)
+						.to({ x: 1, y: 1, z: 1 }, 1000)
+						.easing(TWEEN.Easing.Circular.Out)
+						.start()
 					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 						.to({ x: 1, y: 1, z: 1 }, 1000)
 						.easing(TWEEN.Easing.Circular.Out)
@@ -646,6 +677,10 @@ function onPointerMove(event) {
 						.start()
 					break
 				case jupiter:
+					var bloomfade = new TWEEN.Tween(jupiterbloom.scale)
+						.to({ x: 1, y: 1, z: 1 }, 1000)
+						.easing(TWEEN.Easing.Circular.Out)
+						.start()
 					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 						.to({ x: 1, y: 1, z: 1 }, 1000)
 						.easing(TWEEN.Easing.Circular.Out)
@@ -655,6 +690,10 @@ function onPointerMove(event) {
 						.start()
 					break
 				case mercury:
+					var bloomfade = new TWEEN.Tween(mercurybloom.scale)
+						.to({ x: 1, y: 1, z: 1 }, 1000)
+						.easing(TWEEN.Easing.Circular.Out)
+						.start()
 					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 						.to({ x: 1, y: 1, z: 1 }, 1000)
 						.easing(TWEEN.Easing.Circular.Out)
@@ -667,36 +706,90 @@ function onPointerMove(event) {
 		}
 	}
 }
+let clickedObj = false
+
+function moveAndLookAt(camera, dstpos, dstlookat, options) {
+	options || (options = { duration: 300 })
+
+	controls.enabled = false
+
+	var origpos = new THREE.Vector3().copy(camera.position) // original position
+	var origrot = new THREE.Euler().copy(camera.rotation) // original rotation
+
+	camera.position.set(dstpos.x, dstpos.y, dstpos.z)
+	camera.lookAt(dstlookat)
+	var dstrot = new THREE.Euler().copy(camera.rotation)
+
+	// reset original position and rotation
+	camera.position.set(origpos.x, origpos.y, origpos.z)
+	camera.rotation.set(origrot.x, origrot.y, origrot.z)
+
+	//
+	// Tweening
+	//
+
+	// position
+	new TWEEN.Tween(camera.position)
+		.to(
+			{
+				x: dstpos.x,
+				y: dstpos.y,
+				z: dstpos.z,
+			},
+			options.duration
+		)
+
+		.onComplete(() => {
+			// controls.enabled = true
+
+			controls.target = new THREE.Vector3(
+				mars.position.x,
+				mars.position.y,
+				mars.position.z
+			)
+			controls.update()
+		})
+		.start()
+
+	// rotation (using slerp)
+	;(function () {
+		var qa = (qa = new THREE.Quaternion().copy(camera.quaternion)) // src quaternion
+		var qb = new THREE.Quaternion().setFromEuler(dstrot) // dst quaternion
+		var qm = new THREE.Quaternion()
+		camera.quaternion.copy(qm)
+
+		var o = { t: 0 }
+		new TWEEN.Tween(o)
+			.to({ t: 1 }, options.duration)
+			.onUpdate(function () {
+				qm.slerpQuaternions(qa, qb, o.t)
+				camera.quaternion.set(qm.x, qm.y, qm.z, qm.w)
+			})
+			.start()
+	}.call(this))
+}
 
 const coordenadas = { x: -55, y: 0 }
 function clic() {
 	if (currentObj) {
 		switch (currentObj.object) {
 			case mars:
-				mars_move = new TWEEN.Tween(camera.position)
-					// .to({ x: 1.68, y: 0.792, z: 4.92 }, 2000)
-					// .easing(TWEEN.Easing.Circular.Out)
-					// .onStart(() => {
-					// 	showInfo(0)
-					// 	// camera.lookAt(mars.position)
-					// })
-					// .onComplete(() => {
-					// 	camera.lookAt(mars.position)
-					// })
-					// .start()
-					.to({ x: 15, y: 0 }, 1500)
-					.easing(TWEEN.Easing.Linear.None)
-					.onStart(() => {
-						showInfo(0)
-						camera.lookAt(mars.position)
-					})
-					.onComplete(() => {
-						camera.lookAt(mars.position)
-					})
-					.start()
-				//TWEEN.remove(mars_info_move)
+				clickedObj = true
+				var vector = new THREE.Vector3()
+
+				vector.setFromMatrixPosition(mars.matrixWorld)
+				console.log(vector.x)
+
+				moveAndLookAt(
+					camera,
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
+					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					{ duration: 1500 }
+				)
 				break
 			case neptune:
+				clickedObj = true
+
 				neptune_move = new TWEEN.Tween(camera.position)
 					.to({ x: 3.456, y: 1.392, z: 1.08 }, 2000)
 					.easing(TWEEN.Easing.Circular.Out)
@@ -706,12 +799,18 @@ function clic() {
 					.start()
 				break
 			case venus:
+				clickedObj = true
+
 				window.alert('venus')
 				break
 			case jupiter:
+				clickedObj = true
+
 				window.alert('jupiter')
 				break
 			case mercury:
+				clickedObj = true
+
 				window.alert('mercury')
 				break
 		}
@@ -753,10 +852,15 @@ const tick = () => {
 		//currentObj.object.scale.set(4,4,4)
 	} else {
 		currentObj = null
-		points.rotation.y += 0.002
+		if (clickedObj) {
+			mars.rotation.y += 0.01
+		} else {
+			points.rotation.y += 0.002
+		}
 	}
+
 	TWEEN.update()
-	controls.update()
+	// controls.update()
 	// Render
 	renderer.clearDepth()
 	camera.layers.set(0)
