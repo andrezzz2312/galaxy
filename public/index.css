@@ -1,0 +1,157 @@
+* {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+html,
+body {
+	background: #0c0b0b;
+}
+#can {
+	position: absolute;
+	top: 0;
+	left: 0;
+	outline: none;
+	mix-blend-mode: exclusion;
+}
+
+h1 {
+	text-transform: uppercase;
+	color: aliceblue;
+}
+.info {
+	overflow: hidden;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	max-width: 30rem;
+	padding: 0.5rem;
+	border-radius: 20px;
+
+	top: 7%;
+	left: 3%;
+	background: linear-gradient(0deg, black, rgb(41, 41, 41));
+	opacity: 0;
+	transform: translate3d(-150%, 0, 0);
+	transition: 2s all ease-in-out;
+}
+.block span {
+	color: white;
+	font-family: Arial;
+	font-size: 0.9rem;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	border-radius: 20px;
+	background: linear-gradient(0deg, black, rgb(41, 41, 41));
+	z-index: 1;
+}
+.glow::before {
+	content: '';
+	position: absolute;
+	width: 800px;
+	height: 800px;
+	background-image: conic-gradient(
+		transparent,
+		transparent,
+		transparent,
+		#00ccff
+	);
+	animation: animate 4s linear infinite;
+}
+.glow::after {
+	content: '';
+	position: absolute;
+	width: 800px;
+	height: 800px;
+	background-image: conic-gradient(
+		transparent,
+		transparent,
+		transparent,
+		#ff00ff
+	);
+	animation: animate 4s linear infinite;
+	animation-delay: -2s;
+}
+
+#close {
+	border: none;
+	padding: 1rem;
+	border-radius: 1rem;
+	cursor: pointer;
+}
+
+@keyframes animate {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+}
+
+#txt {
+	font: normal bold 6rem / 1.2 'Poppins', 'Helvetica', sans-serif;
+}
+
+svg {
+	font-family: 'Poppins';
+
+	font-weight: bold;
+	text-transform: uppercase;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	/* transform: 4s font-size; */
+	transition: all 2s ease-in-out;
+}
+text {
+	font-size: 8rem;
+	transition: all 1s ease-in-out;
+}
+#mask {
+	transition: all 2s ease-in-out;
+}
+
+svg rect {
+	fill: white;
+}
+
+svg > rect {
+	-webkit-mask: url(#mask);
+	mask: url(#mask);
+}
+
+#tap {
+	cursor: pointer;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	top: 60%;
+	left: 0;
+	right: 0;
+	text-align: center;
+	width: fit-content;
+	color: white;
+	padding: 1rem;
+	font: normal bold 1.3rem / 1.2 'Poppins', 'Helvetica', sans-serif;
+	border: none;
+	background: black;
+	border-radius: 0.5rem;
+	transition: all 1s ease;
+}
