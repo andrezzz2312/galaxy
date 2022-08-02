@@ -854,6 +854,7 @@ const tick = () => {
 		currentObj = null
 		if (clickedObj) {
 			mars.rotation.y += 0.01
+			mars.rotation.x += 0.005
 		} else {
 			points.rotation.y += 0.002
 		}
