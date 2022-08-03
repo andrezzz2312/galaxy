@@ -56,7 +56,7 @@ const parameters = {
 	insideColor: '#07e5e9',
 	outsideColor: '#2f6cf9',
 }
-
+const star_map = new THREE.TextureLoader().load('./texturas/white-star.png')
 let geometry = null
 let material = null
 let points = null
@@ -363,6 +363,7 @@ const generateGalaxy = () => {
 		depthWrite: false,
 		blending: THREE.AdditiveBlending,
 		vertexColors: true,
+		map: star_map
 	})
 
 	/**
@@ -486,7 +487,22 @@ camera.position.x = 3
 camera.position.y = 3
 camera.position.z = 10
 camera.layers.enable(1)
-//scene.add(camera)
+/**Sonido de fondo de la escena */ 
+// crea el audio y se lo añade a la camara
+const listener = new THREE.AudioListener();
+camera.add( listener );
+
+// se crea el source global de audio
+const sound = new THREE.Audio( listener );
+
+// se caraga el sonido y se lo almacena en el buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( './sonidos/sound_background.mp3', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.2 );
+	sound.play();
+});
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
