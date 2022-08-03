@@ -121,10 +121,15 @@ function closeInfo(info) {
 	info.target.parentElement.parentElement.style.transform =
 		'translate3D(-150%,0,0)'
 	info.target.parentElement.parentElement.style.opacity = '0'
-	close = new TWEEN.Tween(camera.position)
-		.to({ x: 3, y: 3, z: 10 }, 1500)
-		.easing(TWEEN.Easing.Linear.None)
-		.start()
+	moveAndLookAt(
+		camera,
+		new THREE.Vector3(3, 3, 10),
+		new THREE.Vector3(0, 0, 0),
+		{ duration: 1000 }
+	)
+	clickedObj = false
+	controls.enabled = true
+	console.log(controls.target)
 }
 
 close.addEventListener('click', closeInfo)
@@ -633,7 +638,7 @@ function onPointerMove(event) {
 				break
 		}
 	} else {
-		if (currentPlanet) {
+		if (currentPlanet && clickedObj === false) {
 			switch (currentPlanet.object) {
 				case mars:
 					// a
@@ -779,13 +784,14 @@ function clic() {
 
 				vector.setFromMatrixPosition(mars.matrixWorld)
 				console.log(vector.x)
-
+				showInfo(0)
 				moveAndLookAt(
 					camera,
 					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
 					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
 					{ duration: 1500 }
 				)
+
 				break
 			case neptune:
 				clickedObj = true
