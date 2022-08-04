@@ -1,6 +1,6 @@
-import * as THREE from '/build/three.module.js'
+import * as THREE from 'three'
 //import * as THREE from 'three';
-import { OrbitControls } from '/jsm/controls/OrbitControls.js'
+import { OrbitControls } from 'three'
 import * as dat from '/jsm/libs/lil-gui.module.min.js'
 import { TWEEN } from '/jsm/libs/tween.module.min.js'
 /**
@@ -57,12 +57,12 @@ const parameters = {
 	// outsideColor: '#2f6cf9',
 
 	count: 100000,
-	size: 0.01,
+	size: 0.2,
 	radius: 5,
 	branches: 3,
-	spin: 2.68,
-	randomness: 0.2,
-	randomnessPower: 3,
+	spin: 3.68,
+	randomness: 0.3,
+	randomnessPower: 2,
 	insideColor: '#ff6030',
 	outsideColor: '#1b3984',
 }
@@ -70,6 +70,7 @@ const star_map = new THREE.TextureLoader().load('./texturas/white-star.png')
 let geometry = null
 let material = null
 let points = null
+let pointsBack = null
 let ambient_light,
 	directional_light,
 	spot_lightmarsmercury,
@@ -82,7 +83,7 @@ let neptune_move, mars_move, jupiter_move, venus_move, mercury_move
 /**bloom variables */
 let composer, renderScene, bloomPass
 //**button close */
-let close = document.getElementById('close')
+let close = document.querySelectorAll('.close')
 //**informations id */
 var mars_info = document.getElementById('mars_info')
 const raycaster = new THREE.Raycaster()
@@ -96,18 +97,28 @@ const mask = document.querySelector('#mask')
 const tapButton = document.querySelector('#tap')
 
 const info = document.querySelectorAll('.info')
-
+let initialize = false
 function growTitle() {
 	tapButton.style.filter = 'blur(4px)'
 	tapButton.style.opacity = '0'
 	tapButton.style.pointerEvents = 'none'
-
+	const back = new Audio('./sonidos/enter.mp3')
+	back.volume = 0.5
+	back.play()
+	const background = new Audio('./sonidos/background.mp3')
+	background.volume = 0.5
+	background.loop = true
+	background.play()
+	setTimeout(() => {
+		back.pause()
+	}, 3900)
 	setTimeout(() => {
 		svg.style.transform = 'scale(25)'
 		svg.style.top = '70%'
 		svg.style.opacity = '0'
 		text.style.filter = 'blur(4px)'
 		mask.style.filter = 'blur(4px)'
+		initialize = true
 		setTimeout(() => {
 			svg.remove()
 		}, 2000)
@@ -118,21 +129,36 @@ tap.addEventListener('click', growTitle)
 
 // CLOSE BUTTON FUNCTION
 function closeInfo(info) {
+	const back = new Audio('./sonidos/backwardsclick.mp3')
+
+	back.volume = 0.5
+	back.play()
 	info.target.parentElement.parentElement.style.transform =
 		'translate3D(-150%,0,0)'
 	info.target.parentElement.parentElement.style.opacity = '0'
+
+	clickedObj = null
+
 	moveAndLookAt(
 		camera,
-		new THREE.Vector3(3, 3, 10),
+		new THREE.Vector3(3, 3, 7),
 		new THREE.Vector3(0, 0, 0),
 		{ duration: 1000 }
 	)
-	clickedObj = false
+	var starGrow = new TWEEN.Tween(points.material)
+		.to({ size: 0.2 }, 1000)
+		.easing(TWEEN.Easing.Bounce.InOut)
+		.start()
+	var starGrow = new TWEEN.Tween(pointsBack.material)
+		.to({ size: 0.15 }, 1000)
+		.easing(TWEEN.Easing.Bounce.InOut)
+		.start()
 	controls.enabled = true
 	console.log(controls.target)
 }
-
-close.addEventListener('click', closeInfo)
+close.forEach((e) => {
+	e.addEventListener('click', closeInfo)
+})
 
 //
 
@@ -378,6 +404,7 @@ const generateGalaxy = () => {
 		depthWrite: false,
 		blending: THREE.AdditiveBlending,
 		vertexColors: true,
+		opacity: 0.8,
 		map: star_map,
 	})
 
@@ -386,6 +413,7 @@ const generateGalaxy = () => {
 	 */
 	points = new THREE.Points(geometry, material)
 	scene.add(points)
+
 	/**
 	 * planetas
 	 */
@@ -416,6 +444,77 @@ const generateGalaxy = () => {
 		mercurybloom,
 		jupiterbloom
 	)
+}
+
+const generateBackgroundGalaxy = () => {
+	// Destroy old galaxy
+	if (pointsBack !== null) {
+		geometry.dispose()
+		material.dispose()
+		scene.remove(pointsBack)
+	}
+
+	/**
+	 * Geometry
+	 */
+	geometry = new THREE.BufferGeometry()
+
+	const positions = new Float32Array(100000 * 3)
+	const colors = new Float32Array(100000 * 3)
+
+	const colorInside = new THREE.Color('#297fcf')
+	const colorOutside = new THREE.Color('#297fcf')
+
+	for (let i = 0; i < parameters.count; i++) {
+		// Position
+		const i3 = i * 3
+
+		const radius = Math.random() * 6
+
+		const spinAngle = radius * parameters.spin
+		const branchAngle =
+			((i % parameters.branches) / parameters.branches) * Math.PI * 2
+
+		const randomX =
+			Math.pow(Math.random(), 1) * (Math.random() < 0.5 ? 1 : -1) * 2 * radius
+		const randomY =
+			Math.pow(Math.random(), 1) * (Math.random() < 0.5 ? 1 : -1) * 2 * radius
+		const randomZ =
+			Math.pow(Math.random(), 1) * (Math.random() < 0.5 ? 1 : -1) * 2 * radius
+
+		positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX
+		positions[i3 + 1] = randomY
+		positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
+
+		// Color
+		const mixedColor = colorInside.clone()
+		mixedColor.lerp(colorOutside, radius / parameters.radius)
+
+		colors[i3] = mixedColor.r
+		colors[i3 + 1] = mixedColor.g
+		colors[i3 + 2] = mixedColor.b
+	}
+
+	geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+	geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+	/**
+	 * Material
+	 */
+	material = new THREE.PointsMaterial({
+		size: 0.15,
+		sizeAttenuation: true,
+		depthWrite: false,
+		blending: THREE.AdditiveBlending,
+		vertexColors: true,
+		opacity: 1,
+		map: star_map,
+	})
+
+	/**
+	 * Points
+	 */
+	pointsBack = new THREE.Points(geometry, material)
+	scene.add(pointsBack)
 }
 
 gui
@@ -464,6 +563,7 @@ gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy)
 gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy)
 gui.addColor(colors, 'modelcolor').onFinishChange(generateGalaxy)
 
+generateBackgroundGalaxy()
 generateGalaxy()
 
 /**
@@ -500,24 +600,24 @@ const camera = new THREE.PerspectiveCamera(
 )
 camera.position.x = 3
 camera.position.y = 3
-camera.position.z = 10
+camera.position.z = 7
 camera.layers.enable(1)
 /**Sonido de fondo de la escena */
 // crea el audio y se lo añade a la camara
-const listener = new THREE.AudioListener()
-camera.add(listener)
+// const listener = new THREE.AudioListener()
+// camera.add(listener)
 
-// se crea el source global de audio
-const sound = new THREE.Audio(listener)
+// // se crea el source global de audio
+// const sound = new THREE.Audio(listener)
 
-// se caraga el sonido y se lo almacena en el buffer
-const audioLoader = new THREE.AudioLoader()
-audioLoader.load('./sonidos/sound_background.mp3', function (buffer) {
-	sound.setBuffer(buffer)
-	sound.setLoop(true)
-	sound.setVolume(0.2)
-	sound.play()
-})
+// // se caraga el sonido y se lo almacena en el buffer
+// const audioLoader = new THREE.AudioLoader()
+// audioLoader.load('./sonidos/background.mp3', function (buffer) {
+// 	sound.setBuffer(buffer)
+// 	sound.setLoop(true)
+// 	sound.setVolume(0.8)
+// 	sound.play()
+// })
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
@@ -654,80 +754,96 @@ function onPointerMove(event) {
 				break
 		}
 	} else {
-		if (currentPlanet && clickedObj === false) {
+		if (currentPlanet) {
 			switch (currentPlanet.object) {
 				case mars:
 					// a
-					var bloomfade = new TWEEN.Tween(marsbloom.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.start()
 
-					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.onComplete(function () {
-							// mars.layers.set(0)
-						})
-						.start()
+					if (clickedObj === 'mars') {
+					} else {
+						var bloomfade = new TWEEN.Tween(marsbloom.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.start()
+
+						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.onComplete(function () {
+								// mars.layers.set(0)
+							})
+							.start()
+					}
 					break
 				case neptune:
-					var bloomfade = new TWEEN.Tween(neptunebloom.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.start()
-					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.onComplete(function () {
-							// neptune.layers.set(0)
-						})
-						.start()
+					if (clickedObj === 'neptune') {
+					} else {
+						var bloomfade = new TWEEN.Tween(neptunebloom.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.start()
+						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.onComplete(function () {
+								// neptune.layers.set(0)
+							})
+							.start()
+					}
 					break
 				case venus:
-					var bloomfade = new TWEEN.Tween(venusbloom.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.start()
-					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.onComplete(function () {
-							// venus.layers.set(0)
-						})
-						.start()
+					if (clickedObj === 'venus') {
+					} else {
+						var bloomfade = new TWEEN.Tween(venusbloom.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.start()
+						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.onComplete(function () {
+								// venus.layers.set(0)
+							})
+							.start()
+					}
 					break
 				case jupiter:
-					var bloomfade = new TWEEN.Tween(jupiterbloom.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.start()
-					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.onComplete(function () {
-							// jupiter.layers.set(0)
-						})
-						.start()
+					if (clickedObj === 'jupiter') {
+					} else {
+						var bloomfade = new TWEEN.Tween(jupiterbloom.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.start()
+						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.onComplete(function () {
+								// jupiter.layers.set(0)
+							})
+							.start()
+					}
 					break
 				case mercury:
-					var bloomfade = new TWEEN.Tween(mercurybloom.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.start()
-					var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
-						.to({ x: 1, y: 1, z: 1 }, 1000)
-						.easing(TWEEN.Easing.Circular.Out)
-						.onComplete(function () {
-							// mercury.layers.set(0)
-						})
-						.start()
+					if (clickedObj === 'mercury') {
+					} else {
+						var bloomfade = new TWEEN.Tween(mercurybloom.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.start()
+						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
+							.to({ x: 1, y: 1, z: 1 }, 1000)
+							.easing(TWEEN.Easing.Circular.Out)
+							.onComplete(function () {
+								// mercury.layers.set(0)
+							})
+							.start()
+					}
 					break
 			}
 		}
 	}
 }
-let clickedObj = false
+let clickedObj = null
 
 function moveAndLookAt(camera, dstpos, dstlookat, options) {
 	options || (options = { duration: 300 })
@@ -762,9 +878,41 @@ function moveAndLookAt(camera, dstpos, dstlookat, options) {
 
 		.onComplete(() => {
 			// controls.enabled = true
-
-			controls.target = new THREE.Vector3(0, 0, 0)
+			if (clickedObj === 'mars') {
+				controls.target = new THREE.Vector3(
+					mars.position.x,
+					mars.position.y,
+					mars.position.z
+				)
+			} else if (clickedObj === 'neptune') {
+				controls.target = new THREE.Vector3(
+					neptune.position.x,
+					neptune.position.y,
+					neptune.position.z
+				)
+			} else if (clickedObj === 'venus') {
+				controls.target = new THREE.Vector3(
+					venus.position.x,
+					venus.position.y,
+					venus.position.z
+				)
+			} else if (clickedObj === 'jupiter') {
+				controls.target = new THREE.Vector3(
+					jupiter.position.x,
+					jupiter.position.y,
+					jupiter.position.z
+				)
+			} else if (clickedObj === 'mercury') {
+				controls.target = new THREE.Vector3(
+					mercury.position.x,
+					mercury.position.y,
+					mercury.position.z
+				)
+			} else if (clickedObj === null) {
+				controls.target = new THREE.Vector3(0, 0, 0)
+			}
 			controls.update()
+			console.log(controls.target)
 		})
 		.start()
 
@@ -785,18 +933,29 @@ function moveAndLookAt(camera, dstpos, dstlookat, options) {
 			.start()
 	}.call(this))
 }
+const click = new Audio('./sonidos/click1.mp3')
+click.volume = 0.5
 
 const coordenadas = { x: -55, y: 0 }
 function clic() {
-	if (currentObj) {
+	if (currentObj && initialize) {
+		click.play()
+		var starShrink = new TWEEN.Tween(points.material)
+			.to({ size: 0.05 }, 1000)
+			.easing(TWEEN.Easing.Bounce.InOut)
+			.start()
+		var starShrink = new TWEEN.Tween(pointsBack.material)
+			.to({ size: 0.08 }, 1000)
+			.easing(TWEEN.Easing.Bounce.InOut)
+			.start()
 		switch (currentObj.object) {
 			case mars:
-				clickedObj = true
+				clickedObj = 'mars'
 				var vector = new THREE.Vector3()
-
 				vector.setFromMatrixPosition(mars.matrixWorld)
-				console.log(vector.x)
+
 				showInfo(0)
+
 				moveAndLookAt(
 					camera,
 					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
@@ -806,30 +965,64 @@ function clic() {
 
 				break
 			case neptune:
-				clickedObj = true
+				clickedObj = 'neptune'
+				var vector = new THREE.Vector3()
+				vector.setFromMatrixPosition(neptune.matrixWorld)
 
-				neptune_move = new TWEEN.Tween(camera.position)
-					.to({ x: 3.456, y: 1.392, z: 1.08 }, 2000)
-					.easing(TWEEN.Easing.Circular.Out)
-					.onUpdate(() => {
-						controls.target(0, 0, 0)
-					})
-					.start()
+				showInfo(1)
+
+				moveAndLookAt(
+					camera,
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
+					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					{ duration: 1500 }
+				)
+
 				break
 			case venus:
-				clickedObj = true
+				clickedObj = 'venus'
+				var vector = new THREE.Vector3()
+				vector.setFromMatrixPosition(venus.matrixWorld)
 
-				window.alert('venus')
+				showInfo(2)
+
+				moveAndLookAt(
+					camera,
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
+					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					{ duration: 1500 }
+				)
+
 				break
 			case jupiter:
-				clickedObj = true
+				clickedObj = 'jupiter'
+				var vector = new THREE.Vector3()
+				vector.setFromMatrixPosition(jupiter.matrixWorld)
 
-				window.alert('jupiter')
+				showInfo(3)
+
+				moveAndLookAt(
+					camera,
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
+					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					{ duration: 1500 }
+				)
+
 				break
 			case mercury:
-				clickedObj = true
+				clickedObj = 'mercury'
+				var vector = new THREE.Vector3()
+				vector.setFromMatrixPosition(mercury.matrixWorld)
 
-				window.alert('mercury')
+				showInfo(4)
+
+				moveAndLookAt(
+					camera,
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
+					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					{ duration: 1500 }
+				)
+
 				break
 		}
 	}
@@ -864,17 +1057,57 @@ const tick = () => {
 	if (intersects.length) {
 		currentObj = intersects[0]
 		currentPlanet = intersects[0]
-
-		// console.log(currentObj)
-		// console.log(currentPlanet)
-		//currentObj.object.scale.set(4,4,4)
-	} else {
-		currentObj = null
 		if (clickedObj) {
 			mars.rotation.y += 0.01
 			mars.rotation.x += 0.005
+
+			neptune.rotation.y += 0.01
+			neptune.rotation.x += 0.005
+
+			venus.rotation.y += 0.01
+			venus.rotation.x += 0.005
+
+			jupiter.rotation.y += 0.01
+			jupiter.rotation.x += 0.005
+
+			mercury.rotation.y += 0.01
+			mercury.rotation.x += 0.005
+		}
+	} else {
+		currentObj = null
+
+		if (clickedObj === 'mars') {
+			mars.rotation.y += 0.01
+			mars.rotation.x += 0.005
+		} else if (clickedObj === 'neptune') {
+			neptune.rotation.y += 0.01
+			neptune.rotation.x += 0.005
+		} else if (clickedObj === 'venus') {
+			venus.rotation.y += 0.01
+			venus.rotation.x += 0.005
+		} else if (clickedObj === 'jupiter') {
+			jupiter.rotation.y += 0.01
+			jupiter.rotation.x += 0.005
+		} else if (clickedObj === 'mercury') {
+			mercury.rotation.y += 0.01
+			mercury.rotation.x += 0.005
 		} else {
 			points.rotation.y += 0.002
+			pointsBack.rotation.y += 0.002
+			mars.rotation.y += 0.01
+			mars.rotation.x += 0.005
+
+			neptune.rotation.y += 0.01
+			neptune.rotation.x += 0.005
+
+			venus.rotation.y += 0.01
+			venus.rotation.x += 0.005
+
+			jupiter.rotation.y += 0.01
+			jupiter.rotation.x += 0.005
+
+			mercury.rotation.y += 0.01
+			mercury.rotation.x += 0.005
 		}
 	}
 

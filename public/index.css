@@ -73,13 +73,13 @@ h1 {
 		transparent,
 		transparent,
 		transparent,
-		#ff00ff
+		#ff6030
 	);
 	animation: animate 4s linear infinite;
 	animation-delay: -2s;
 }
 
-#close {
+.close {
 	border: none;
 	padding: 1rem;
 	border-radius: 1rem;
@@ -116,6 +116,7 @@ svg {
 	top: 0;
 	left: 0;
 	height: 100%;
+
 	/* transform: 4s font-size; */
 	transition: all 2s ease-in-out;
 }
@@ -123,6 +124,7 @@ text {
 	font-size: 8rem;
 	transition: all 1s ease-in-out;
 }
+
 #mask {
 	transition: all 2s ease-in-out;
 }
