@@ -1,6 +1,6 @@
-import * as THREE from 'three'
+import * as THREE from '/build/three.module.js'
 //import * as THREE from 'three';
-import { OrbitControls } from 'three'
+import { OrbitControls } from '/jsm/controls/OrbitControls.js'
 import * as dat from '/jsm/libs/lil-gui.module.min.js'
 import { TWEEN } from '/jsm/libs/tween.module.min.js'
 /**
