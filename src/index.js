@@ -66,6 +66,7 @@ const parameters = {
 	insideColor: '#ff6030',
 	outsideColor: '#1b3984',
 }
+
 const star_map = new THREE.TextureLoader().load('./texturas/white-star.png')
 let geometry = null
 let material = null
