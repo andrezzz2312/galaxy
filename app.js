@@ -4,6 +4,7 @@ const { request } = require('http')
 const app = express()
 const path = require('path')
 
+console.log('xd');
 // app.use(express.static(__dirname + '/src'))
 // app.use(
 // 	'/build/',
