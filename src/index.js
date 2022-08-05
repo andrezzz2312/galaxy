@@ -1,7 +1,7 @@
 // import * as THREE from 'node_modules/three/build/three.module.js'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import * as dat from '../node_modules/three/examples/jsm/libs/lil-gui.module.min.js'
+
 import { TWEEN } from '../node_modules/three/examples/jsm/libs/tween.module.min.js'
 // /**
 //  * unreal bloom
@@ -9,16 +9,9 @@ import { TWEEN } from '../node_modules/three/examples/jsm/libs/tween.module.min.
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-const gui = new dat.GUI()
+
 //const Tween = new tween.TWEEN()
-const neptuneFold = gui.addFolder('camera')
-const mercuryFold = gui.addFolder('mercury')
-const venusFold = gui.addFolder('venus')
-const marsFold = gui.addFolder('mars')
-const jupiterFold = gui.addFolder('jupiter')
-const directional_light_fold = gui.addFolder('directional Light')
-const rotationFold = gui.addFolder('rotation')
-const bloom_op = gui.addFolder('bloom')
+
 // Scene
 const scene = new THREE.Scene()
 //scene.background = new THREE.Color(0x660a5a)
@@ -517,52 +510,6 @@ const generateBackgroundGalaxy = () => {
 	pointsBack = new THREE.Points(geometry, material)
 	scene.add(pointsBack)
 }
-
-gui
-	.add(parameters, 'count')
-	.min(100)
-	.max(1000000)
-	.step(100)
-	.onFinishChange(generateGalaxy)
-gui
-	.add(parameters, 'size')
-	.min(0.001)
-	.max(0.1)
-	.step(0.001)
-	.onFinishChange(generateGalaxy)
-gui
-	.add(parameters, 'radius')
-	.min(0.01)
-	.max(20)
-	.step(0.01)
-	.onFinishChange(generateGalaxy)
-gui
-	.add(parameters, 'branches')
-	.min(2)
-	.max(20)
-	.step(1)
-	.onFinishChange(generateGalaxy)
-gui
-	.add(parameters, 'spin')
-	.min(-5)
-	.max(5)
-	.step(0.001)
-	.onFinishChange(generateGalaxy)
-gui
-	.add(parameters, 'randomness')
-	.min(0)
-	.max(2)
-	.step(0.001)
-	.onFinishChange(generateGalaxy)
-gui
-	.add(parameters, 'randomnessPower')
-	.min(1)
-	.max(10)
-	.step(0.001)
-	.onFinishChange(generateGalaxy)
-gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy)
-gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy)
-gui.addColor(colors, 'modelcolor').onFinishChange(generateGalaxy)
 
 generateBackgroundGalaxy()
 generateGalaxy()
