@@ -1,14 +1,14 @@
-import * as THREE from '/build/three.module.js'
-//import * as THREE from 'three';
-import { OrbitControls } from '/jsm/controls/OrbitControls.js'
-import * as dat from '/jsm/libs/lil-gui.module.min.js'
-import { TWEEN } from '/jsm/libs/tween.module.min.js'
-/**
- * unreal bloom
- */
-import { RenderPass } from '/jsm/postprocessing/RenderPass.js'
-import { UnrealBloomPass } from '/jsm/postprocessing/UnrealBloomPass.js'
-import { EffectComposer } from '/jsm/postprocessing/EffectComposer.js'
+// import * as THREE from 'node_modules/three/build/three.module.js'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as dat from '../node_modules/three/examples/jsm/libs/lil-gui.module.min.js'
+import { TWEEN } from '../node_modules/three/examples/jsm/libs/tween.module.min.js'
+// /**
+//  * unreal bloom
+//  */
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 const gui = new dat.GUI()
 //const Tween = new tween.TWEEN()
 const neptuneFold = gui.addFolder('camera')
