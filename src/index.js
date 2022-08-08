@@ -113,6 +113,7 @@ function growTitle() {
 		text.style.filter = 'blur(4px)'
 		mask.style.filter = 'blur(4px)'
 		initialize = true
+		svg.style.pointerEvents = 'none'
 		setTimeout(() => {
 			svg.remove()
 		}, 2000)
@@ -148,7 +149,8 @@ function closeInfo(info) {
 		.easing(TWEEN.Easing.Bounce.InOut)
 		.start()
 	controls.enabled = true
-	console.log(controls.target)
+	controls.minDistance = 6
+	controls.maxDistance = 10
 }
 close.forEach((e) => {
 	e.addEventListener('click', closeInfo)
@@ -490,6 +492,8 @@ camera.layers.enable(1)
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+controls.minDistance = 6
+controls.maxDistance = 10
 
 /**
  * Renderer
@@ -562,9 +566,6 @@ function onPointerMove(event) {
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
-					.onUpdate(function () {
-						// mars.layers.enable(1)
-					})
 					.start()
 
 				break
@@ -576,9 +577,6 @@ function onPointerMove(event) {
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
-					.onUpdate(function () {
-						// neptune.layers.enable(1)
-					})
 					.start()
 				break
 			case venus:
@@ -589,9 +587,6 @@ function onPointerMove(event) {
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
-					.onUpdate(function () {
-						// venus.layers.enable(1)
-					})
 					.start()
 				break
 			case jupiter:
@@ -602,9 +597,6 @@ function onPointerMove(event) {
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
-					.onUpdate(function () {
-						// jupiter.layers.enable(1)
-					})
 					.start()
 				break
 			case mercury:
@@ -615,9 +607,6 @@ function onPointerMove(event) {
 				var universe_scale = new TWEEN.Tween(currentObj.object.scale)
 					.to({ x: 3, y: 3, z: 3 }, 1000)
 					.easing(TWEEN.Easing.Circular.Out)
-					.onUpdate(function () {
-						// mercury.layers.enable(1)
-					})
 					.start()
 				break
 		}
@@ -625,8 +614,6 @@ function onPointerMove(event) {
 		if (currentPlanet) {
 			switch (currentPlanet.object) {
 				case mars:
-					// a
-
 					if (clickedObj === 'mars') {
 					} else {
 						var bloomfade = new TWEEN.Tween(marsbloom.scale)
@@ -637,9 +624,6 @@ function onPointerMove(event) {
 						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 							.to({ x: 1, y: 1, z: 1 }, 1000)
 							.easing(TWEEN.Easing.Circular.Out)
-							.onComplete(function () {
-								// mars.layers.set(0)
-							})
 							.start()
 					}
 					break
@@ -653,9 +637,6 @@ function onPointerMove(event) {
 						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 							.to({ x: 1, y: 1, z: 1 }, 1000)
 							.easing(TWEEN.Easing.Circular.Out)
-							.onComplete(function () {
-								// neptune.layers.set(0)
-							})
 							.start()
 					}
 					break
@@ -669,9 +650,6 @@ function onPointerMove(event) {
 						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 							.to({ x: 1, y: 1, z: 1 }, 1000)
 							.easing(TWEEN.Easing.Circular.Out)
-							.onComplete(function () {
-								// venus.layers.set(0)
-							})
 							.start()
 					}
 					break
@@ -685,9 +663,6 @@ function onPointerMove(event) {
 						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 							.to({ x: 1, y: 1, z: 1 }, 1000)
 							.easing(TWEEN.Easing.Circular.Out)
-							.onComplete(function () {
-								// jupiter.layers.set(0)
-							})
 							.start()
 					}
 					break
@@ -701,9 +676,6 @@ function onPointerMove(event) {
 						var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
 							.to({ x: 1, y: 1, z: 1 }, 1000)
 							.easing(TWEEN.Easing.Circular.Out)
-							.onComplete(function () {
-								// mercury.layers.set(0)
-							})
 							.start()
 					}
 					break
@@ -816,6 +788,12 @@ function clic() {
 			.to({ size: 0.08 }, 1000)
 			.easing(TWEEN.Easing.Bounce.InOut)
 			.start()
+		info.forEach((e) => {
+			e.style.transform = 'translate3D(-150%,0,0)'
+			e.opacity = '0'
+		})
+		controls.minDistance = 0
+		controls.maxDistance = 100
 		switch (currentObj.object) {
 			case mars:
 				clickedObj = 'mars'
@@ -826,8 +804,8 @@ function clic() {
 
 				moveAndLookAt(
 					camera,
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
-					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
 					{ duration: 1500 }
 				)
 
@@ -841,8 +819,8 @@ function clic() {
 
 				moveAndLookAt(
 					camera,
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
-					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
 					{ duration: 1500 }
 				)
 
@@ -856,8 +834,8 @@ function clic() {
 
 				moveAndLookAt(
 					camera,
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
-					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
 					{ duration: 1500 }
 				)
 
@@ -871,8 +849,8 @@ function clic() {
 
 				moveAndLookAt(
 					camera,
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
-					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
 					{ duration: 1500 }
 				)
 
@@ -886,8 +864,8 @@ function clic() {
 
 				moveAndLookAt(
 					camera,
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z - 2),
-					new THREE.Vector3(vector.x + 2, vector.y, vector.z),
+					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
 					{ duration: 1500 }
 				)
 
@@ -919,7 +897,13 @@ const tick = () => {
 	camera.layers.set(1)
 	composer.render()
 	const elapsedTime = clock.getElapsedTime()
-	raycaster.setFromCamera(pointer, camera)
+	if (initialize) {
+		raycaster.setFromCamera(pointer, camera)
+	}
+	if (!clickedObj) {
+		controls.update()
+	}
+
 	const objetos = [mars, neptune, venus, jupiter, mercury]
 	const intersects = raycaster.intersectObjects(objetos)
 	if (intersects.length) {
@@ -980,7 +964,7 @@ const tick = () => {
 	}
 
 	TWEEN.update()
-	// controls.update()
+
 	// Render
 	renderer.clearDepth()
 	camera.layers.set(0)
