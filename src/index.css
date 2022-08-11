@@ -137,7 +137,99 @@ svg > rect {
 	-webkit-mask: url(#mask);
 	mask: url(#mask);
 }
-
+.menu {
+	cursor: pointer;
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: flex-end;
+	bottom: 0;
+	left: 0;
+	margin-left: -3rem;
+	margin-bottom: -3rem;
+	padding: 3rem;
+	width: 12rem;
+	height: 12rem;
+	font: normal bold 1.3rem 'Poppins', sans-serif;
+	background: white;
+	color: black;
+	border-radius: 50% 50% 50% 0;
+	text-align: center;
+	border: none;
+	z-index: 2;
+}
+.ar {
+	cursor: pointer;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	bottom: 0;
+	left: 0;
+	width: 5rem;
+	height: 5rem;
+	padding: 1rem;
+	font: normal bold 1.3rem 'Poppins', sans-serif;
+	background: white;
+	color: black;
+	border-radius: 50%;
+	text-align: center;
+	border: none;
+	transition: all 1s ease-in-out;
+	z-index: 1;
+}
+.vr {
+	cursor: pointer;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	bottom: 0;
+	left: 0;
+	width: 5rem;
+	height: 5rem;
+	padding: 1rem;
+	font: normal bold 1.3rem 'Poppins', sans-serif;
+	background: white;
+	color: black;
+	border-radius: 50%;
+	text-align: center;
+	border: none;
+	transition: all 1s ease-in-out;
+	z-index: 1;
+}
+.menuIcon {
+	position: absolute;
+	right: 3rem;
+	top: 3rem;
+	width: 5rem;
+	opacity: 1;
+	transition: all 1s ease-in-out;
+}
+.leftIcon {
+	position: absolute;
+	right: 3rem;
+	top: 3rem;
+	width: 5rem;
+	opacity: 1;
+	transition: all 1s ease-in-out;
+}
+.vrIcon {
+	width: 4rem;
+	opacity: 1;
+	transition: all 1s ease-in-out;
+}
+.arIcon {
+	width: 4rem;
+	opacity: 1;
+	transition: all 1s ease-in-out;
+}
+.clickedIcon {
+	opacity: 0;
+}
 #tap {
 	cursor: pointer;
 	position: absolute;

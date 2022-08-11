@@ -29,12 +29,8 @@ module.exports = {
 					to: '',
 				},
 				{
-					from: 'src/sonidos',
-					to: 'sonidos',
-				},
-				{
-					from: 'src/texturas',
-					to: 'texturas',
+					from: 'src/assets',
+					to: 'assets',
 				},
 			],
 		}),

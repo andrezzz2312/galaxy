@@ -60,7 +60,9 @@ const parameters = {
 	outsideColor: '#1b3984',
 }
 
-const star_map = new THREE.TextureLoader().load('./texturas/white-star.png')
+const star_map = new THREE.TextureLoader().load(
+	'./assets/texturas/white-star.png'
+)
 let geometry = null
 let material = null
 let points = null
@@ -96,10 +98,10 @@ function growTitle() {
 	tapButton.style.filter = 'blur(4px)'
 	tapButton.style.opacity = '0'
 	tapButton.style.pointerEvents = 'none'
-	const back = new Audio('./sonidos/enter.mp3')
+	const back = new Audio('./assets/sonidos/enter.mp3')
 	back.volume = 0.5
 	back.play()
-	const background = new Audio('./sonidos/background.mp3')
+	const background = new Audio('./assets/sonidos/background.mp3')
 	background.volume = 0.5
 	background.loop = true
 	background.play()
@@ -122,9 +124,35 @@ function growTitle() {
 
 tap.addEventListener('click', growTitle)
 
+const menu = document.querySelector('.menu')
+const vr = document.querySelector('.vr')
+const ar = document.querySelector('.ar')
+const menuIcon = document.querySelector('.menuIcon')
+const leftIcon = document.querySelector('.leftIcon')
+let clicked = false
+menu.addEventListener('click', function () {
+	if (!clicked) {
+		setTimeout(() => {
+			leftIcon.classList.toggle('clickedIcon')
+		}, 500)
+		menuIcon.classList.toggle('clickedIcon')
+
+		vr.style.transform = 'translate3d(1rem,-11rem,0)'
+		ar.style.transform = 'translate3d(11rem,-1rem,0)'
+	} else {
+		setTimeout(() => {
+			menuIcon.classList.toggle('clickedIcon')
+		}, 500)
+
+		leftIcon.classList.toggle('clickedIcon')
+		vr.style.transform = 'translate3d(0,0,0)'
+		ar.style.transform = 'translate3d(0,0,0)'
+	}
+	clicked = !clicked
+})
 // CLOSE BUTTON FUNCTION
 function closeInfo(info) {
-	const back = new Audio('./sonidos/backwardsclick.mp3')
+	const back = new Audio('./assets/sonidos/backwardsclick.mp3')
 
 	back.volume = 0.5
 	back.play()
@@ -162,13 +190,19 @@ function showInfo(evt) {
 	info[evt].style.transform = 'translate3D(0,0,0)'
 	info[evt].style.opacity = '1'
 }
-const mercury_map = new THREE.TextureLoader().load('./texturas/2k_mercury.jpg')
-const venus_map = new THREE.TextureLoader().load(
-	'./texturas/2k_venus_atmosphere.jpg'
+const mercury_map = new THREE.TextureLoader().load(
+	'./assets/texturas/2k_mercury.jpg'
 )
-const mars_map = new THREE.TextureLoader().load('./texturas/2k_mars.jpg')
-const jupiter_map = new THREE.TextureLoader().load('./texturas/2k_jupiter.jpg')
-const neptune_map = new THREE.TextureLoader().load('./texturas/2k_neptune.jpg')
+const venus_map = new THREE.TextureLoader().load(
+	'./assets/texturas/2k_venus_atmosphere.jpg'
+)
+const mars_map = new THREE.TextureLoader().load('./assets/texturas/2k_mars.jpg')
+const jupiter_map = new THREE.TextureLoader().load(
+	'./assets/texturas/2k_jupiter.jpg'
+)
+const neptune_map = new THREE.TextureLoader().load(
+	'./assets/texturas/2k_neptune.jpg'
+)
 
 const geometry_1 = new THREE.SphereGeometry(0.2, 64, 32)
 const material_1 = new THREE.MeshPhongMaterial({
@@ -482,7 +516,7 @@ camera.layers.enable(1)
 
 // // se caraga el sonido y se lo almacena en el buffer
 // const audioLoader = new THREE.AudioLoader()
-// audioLoader.load('./sonidos/background.mp3', function (buffer) {
+// audioLoader.load('./assets/sonidos/background.mp3', function (buffer) {
 // 	sound.setBuffer(buffer)
 // 	sound.setLoop(true)
 // 	sound.setVolume(0.8)
@@ -773,7 +807,7 @@ function moveAndLookAt(camera, dstpos, dstlookat, options) {
 			.start()
 	}.call(this))
 }
-const click = new Audio('./sonidos/click1.mp3')
+const click = new Audio('./assets/sonidos/click1.mp3')
 click.volume = 0.5
 
 const coordenadas = { x: -55, y: 0 }
