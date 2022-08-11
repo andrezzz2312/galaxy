@@ -116,6 +116,7 @@ svg {
 	top: 0;
 	left: 0;
 	height: 100%;
+	z-index: 3;
 
 	/* transform: 4s font-size; */
 	transition: all 2s ease-in-out;
@@ -247,4 +248,5 @@ svg > rect {
 	background: black;
 	border-radius: 0.5rem;
 	transition: all 1s ease;
+	z-index: 4;
 }
