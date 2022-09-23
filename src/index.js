@@ -12,6 +12,21 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 
 //const Tween = new tween.TWEEN()
 
+const progressBar = document.getElementById('progress-bar')
+
+const loadingManager = new THREE.LoadingManager()
+
+loadingManager.onProgress = function (url, loaded, total) {
+	progressBar.value = (loaded / total) * 100
+}
+const progressBarContainer = document.querySelector('.progress-bar-container')
+loadingManager.onLoad = function () {
+	// progressBarContainer.style.display = ' none'
+	setTimeout(() => {
+		progressBarContainer.classList.add('vanish')
+		progressBarContainer.style.pointerEvents = 'none'
+	}, 2000)
+}
 // Scene
 const scene = new THREE.Scene()
 //scene.background = new THREE.Color(0x660a5a)
@@ -60,7 +75,7 @@ const parameters = {
 	outsideColor: '#1b3984',
 }
 
-const star_map = new THREE.TextureLoader().load(
+const star_map = new THREE.TextureLoader(loadingManager).load(
 	'./assets/texturas/white-star.png'
 )
 let geometry = null
@@ -190,17 +205,19 @@ function showInfo(evt) {
 	info[evt].style.transform = 'translate3D(0,0,0)'
 	info[evt].style.opacity = '1'
 }
-const mercury_map = new THREE.TextureLoader().load(
+const mercury_map = new THREE.TextureLoader(loadingManager).load(
 	'./assets/texturas/2k_mercury.jpg'
 )
-const venus_map = new THREE.TextureLoader().load(
+const venus_map = new THREE.TextureLoader(loadingManager).load(
 	'./assets/texturas/2k_venus_atmosphere.jpg'
 )
-const mars_map = new THREE.TextureLoader().load('./assets/texturas/2k_mars.jpg')
-const jupiter_map = new THREE.TextureLoader().load(
+const mars_map = new THREE.TextureLoader(loadingManager).load(
+	'./assets/texturas/2k_mars.jpg'
+)
+const jupiter_map = new THREE.TextureLoader(loadingManager).load(
 	'./assets/texturas/2k_jupiter.jpg'
 )
-const neptune_map = new THREE.TextureLoader().load(
+const neptune_map = new THREE.TextureLoader(loadingManager).load(
 	'./assets/texturas/2k_neptune.jpg'
 )
 
@@ -941,6 +958,7 @@ const tick = () => {
 	const objetos = [mars, neptune, venus, jupiter, mercury]
 	const intersects = raycaster.intersectObjects(objetos)
 	if (intersects.length) {
+		console.log(mars.rotation.y)
 		currentObj = intersects[0]
 		currentPlanet = intersects[0]
 		if (clickedObj) {
@@ -963,8 +981,8 @@ const tick = () => {
 		currentObj = null
 
 		if (clickedObj === 'mars') {
-			mars.rotation.y += 0.01
-			mars.rotation.x += 0.005
+			// mars.rotation.y += 0.01
+			// mars.rotation.x += 0.005
 		} else if (clickedObj === 'neptune') {
 			neptune.rotation.y += 0.01
 			neptune.rotation.x += 0.005
