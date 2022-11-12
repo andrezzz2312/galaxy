@@ -145,26 +145,26 @@ const ar = document.querySelector('.ar')
 const menuIcon = document.querySelector('.menuIcon')
 const leftIcon = document.querySelector('.leftIcon')
 let clicked = false
-menu.addEventListener('click', function () {
-	if (!clicked) {
-		setTimeout(() => {
-			leftIcon.classList.toggle('clickedIcon')
-		}, 500)
-		menuIcon.classList.toggle('clickedIcon')
+// menu.addEventListener('click', function () {
+// 	if (!clicked) {
+// 		setTimeout(() => {
+// 			leftIcon.classList.toggle('clickedIcon')
+// 		}, 500)
+// 		menuIcon.classList.toggle('clickedIcon')
 
-		vr.style.transform = 'translate3d(1rem,-11rem,0)'
-		ar.style.transform = 'translate3d(11rem,-1rem,0)'
-	} else {
-		setTimeout(() => {
-			menuIcon.classList.toggle('clickedIcon')
-		}, 500)
+// 		vr.style.transform = 'translate3d(1rem,-11rem,0)'
+// 		ar.style.transform = 'translate3d(11rem,-1rem,0)'
+// 	} else {
+// 		setTimeout(() => {
+// 			menuIcon.classList.toggle('clickedIcon')
+// 		}, 500)
 
-		leftIcon.classList.toggle('clickedIcon')
-		vr.style.transform = 'translate3d(0,0,0)'
-		ar.style.transform = 'translate3d(0,0,0)'
-	}
-	clicked = !clicked
-})
+// 		leftIcon.classList.toggle('clickedIcon')
+// 		vr.style.transform = 'translate3d(0,0,0)'
+// 		ar.style.transform = 'translate3d(0,0,0)'
+// 	}
+// 	clicked = !clicked
+// })
 // CLOSE BUTTON FUNCTION
 function closeInfo(info) {
 	const back = new Audio('./assets/sonidos/backwardsclick.mp3')
