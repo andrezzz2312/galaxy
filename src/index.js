@@ -199,9 +199,55 @@ function closeInfo(info) {
 	prevPlanet = ''
 
 	clickedObj = null
-	setTimeout(() => {
-		clickedObj = null
-	}, 1000)
+
+	var universe_scale = new TWEEN.Tween(currentPlanet.object.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+	var universe_scale = new TWEEN.Tween(mars.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+	var universe_scale = new TWEEN.Tween(neptune.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+	var universe_scale = new TWEEN.Tween(venus.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+	var universe_scale = new TWEEN.Tween(jupiter.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+	var universe_scale = new TWEEN.Tween(mercury.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+
+	var bloomfade = new TWEEN.Tween(marsbloom.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+	var bloomfade = new TWEEN.Tween(neptunebloom.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+
+	var bloomfade = new TWEEN.Tween(venusbloom.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+
+	var bloomfade = new TWEEN.Tween(jupiterbloom.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
+
+	var bloomfade = new TWEEN.Tween(mercurybloom.scale)
+		.to({ x: 1, y: 1, z: 1 }, 1000)
+		.easing(TWEEN.Easing.Circular.Out)
+		.start()
 }
 
 //
@@ -977,10 +1023,11 @@ const tick = () => {
 		currentPlanet = intersects[0]
 
 		canvas.style.cursor = 'pointer'
+
 		// console.log(mars.rotation.y)
 
 		if (clickedObj) {
-			canvas.style.cursor = 'auto'
+			// canvas.style.cursor = 'auto'
 			// mars.rotation.y += 0.01
 			// mars.rotation.x += 0.005
 			mars.rotation.y += 0.005
@@ -1001,6 +1048,7 @@ const tick = () => {
 			pointsBack.rotation.y += 0.001
 		}
 	} else {
+		canvas.style.cursor = 'auto'
 		currentObj = null
 
 		// if (clickedObj === 'mars') {
