@@ -804,6 +804,7 @@ function moveAndLookAt(camera, dstpos, dstlookat, options) {
 			}
 			controls.update()
 			console.log(controls.target)
+			console.log('skere')
 		})
 		.start()
 
@@ -958,13 +959,18 @@ const tick = () => {
 	const objetos = [mars, neptune, venus, jupiter, mercury]
 	const intersects = raycaster.intersectObjects(objetos)
 	if (intersects.length) {
-		console.log(mars.rotation.y)
 		currentObj = intersects[0]
 		currentPlanet = intersects[0]
-		if (clickedObj) {
-			mars.rotation.y += 0.01
-			mars.rotation.x += 0.005
 
+		canvas.style.cursor = 'pointer'
+		// console.log(mars.rotation.y)
+
+		if (clickedObj) {
+			canvas.style.cursor = 'auto'
+			// mars.rotation.y += 0.01
+			// mars.rotation.x += 0.005
+			mars.rotation.y += 0.005
+			mars.rotation.x += 0.003
 			neptune.rotation.y += 0.01
 			neptune.rotation.x += 0.005
 
@@ -976,13 +982,17 @@ const tick = () => {
 
 			mercury.rotation.y += 0.01
 			mercury.rotation.x += 0.005
+		} else {
+			points.rotation.y += 0.001
+			pointsBack.rotation.y += 0.001
 		}
 	} else {
 		currentObj = null
 
 		if (clickedObj === 'mars') {
-			// mars.rotation.y += 0.01
-			// mars.rotation.x += 0.005
+			console.log('test mars')
+			mars.rotation.y += 0.005
+			mars.rotation.x += 0.003
 		} else if (clickedObj === 'neptune') {
 			neptune.rotation.y += 0.01
 			neptune.rotation.x += 0.005
@@ -996,8 +1006,11 @@ const tick = () => {
 			mercury.rotation.y += 0.01
 			mercury.rotation.x += 0.005
 		} else {
+			// ESTO HACE GIRAR LA GALAXIA *
 			points.rotation.y += 0.002
 			pointsBack.rotation.y += 0.002
+			////////////
+			canvas.style.cursor = 'auto'
 			mars.rotation.y += 0.01
 			mars.rotation.x += 0.005
 

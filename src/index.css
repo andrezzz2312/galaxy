@@ -13,6 +13,7 @@ body {
 	left: 0;
 	outline: none;
 	mix-blend-mode: exclusion;
+	/* cursor: pointer; */
 }
 
 h1 {
