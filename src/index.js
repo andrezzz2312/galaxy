@@ -166,6 +166,10 @@ let clicked = false
 // 	clicked = !clicked
 // })
 // CLOSE BUTTON FUNCTION
+close.forEach((e) => {
+	e.addEventListener('click', closeInfo)
+})
+
 function closeInfo(info) {
 	const back = new Audio('./assets/sonidos/backwardsclick.mp3')
 
@@ -174,8 +178,6 @@ function closeInfo(info) {
 	info.target.parentElement.parentElement.style.transform =
 		'translate3D(-150%,0,0)'
 	info.target.parentElement.parentElement.style.opacity = '0'
-
-	clickedObj = null
 
 	moveAndLookAt(
 		camera,
@@ -194,10 +196,13 @@ function closeInfo(info) {
 	controls.enabled = true
 	controls.minDistance = 6
 	controls.maxDistance = 10
+	prevPlanet = ''
+
+	clickedObj = null
+	setTimeout(() => {
+		clickedObj = null
+	}, 1000)
 }
-close.forEach((e) => {
-	e.addEventListener('click', closeInfo)
-})
 
 //
 
@@ -607,6 +612,7 @@ function onPointerMove(event) {
 	pointer.y = -(event.clientY / sizes.height) * 2 + 1
 
 	if (currentObj) {
+		console.log('currentObj')
 		switch (currentObj.object) {
 			case mars:
 				var bloomfade = new TWEEN.Tween(marsbloom.scale)
@@ -662,7 +668,9 @@ function onPointerMove(event) {
 				break
 		}
 	} else {
+		console.log('nocurrentObj')
 		if (currentPlanet) {
+			console.log(clickedObj)
 			switch (currentPlanet.object) {
 				case mars:
 					if (clickedObj === 'mars') {
@@ -827,101 +835,107 @@ function moveAndLookAt(camera, dstpos, dstlookat, options) {
 }
 const click = new Audio('./assets/sonidos/click1.mp3')
 click.volume = 0.5
-
+let prevPlanet = ''
 const coordenadas = { x: -55, y: 0 }
 function clic() {
-	if (currentObj && initialize) {
-		click.play()
-		var starShrink = new TWEEN.Tween(points.material)
-			.to({ size: 0.05 }, 1000)
-			.easing(TWEEN.Easing.Bounce.InOut)
-			.start()
-		var starShrink = new TWEEN.Tween(pointsBack.material)
-			.to({ size: 0.08 }, 1000)
-			.easing(TWEEN.Easing.Bounce.InOut)
-			.start()
-		info.forEach((e) => {
-			e.style.transform = 'translate3D(-150%,0,0)'
-			e.opacity = '0'
-		})
-		controls.minDistance = 0
-		controls.maxDistance = 100
-		switch (currentObj.object) {
-			case mars:
-				clickedObj = 'mars'
-				var vector = new THREE.Vector3()
-				vector.setFromMatrixPosition(mars.matrixWorld)
+	if (currentObj) {
+		if (currentObj.object.uuid !== prevPlanet) {
+			if (currentObj && initialize) {
+				click.play()
+				var starShrink = new TWEEN.Tween(points.material)
+					.to({ size: 0.05 }, 1000)
+					.easing(TWEEN.Easing.Bounce.InOut)
+					.start()
+				var starShrink = new TWEEN.Tween(pointsBack.material)
+					.to({ size: 0.08 }, 1000)
+					.easing(TWEEN.Easing.Bounce.InOut)
+					.start()
+				info.forEach((e) => {
+					e.style.transform = 'translate3D(-150%,0,0)'
+					e.opacity = '0'
+				})
+				controls.minDistance = 0
+				controls.maxDistance = 100
+				switch (currentObj.object) {
+					case mars:
+						console.log(currentObj.object)
+						clickedObj = 'mars'
+						var vector = new THREE.Vector3()
+						vector.setFromMatrixPosition(mars.matrixWorld)
 
-				showInfo(0)
+						showInfo(0)
 
-				moveAndLookAt(
-					camera,
-					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
-					{ duration: 1500 }
-				)
+						moveAndLookAt(
+							camera,
+							new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+							new THREE.Vector3(vector.x - 1, vector.y, vector.z),
+							{ duration: 1500 }
+						)
 
-				break
-			case neptune:
-				clickedObj = 'neptune'
-				var vector = new THREE.Vector3()
-				vector.setFromMatrixPosition(neptune.matrixWorld)
+						break
+					case neptune:
+						clickedObj = 'neptune'
+						var vector = new THREE.Vector3()
+						vector.setFromMatrixPosition(neptune.matrixWorld)
 
-				showInfo(1)
+						showInfo(1)
 
-				moveAndLookAt(
-					camera,
-					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
-					{ duration: 1500 }
-				)
+						moveAndLookAt(
+							camera,
+							new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+							new THREE.Vector3(vector.x - 1, vector.y, vector.z),
+							{ duration: 1500 }
+						)
 
-				break
-			case venus:
-				clickedObj = 'venus'
-				var vector = new THREE.Vector3()
-				vector.setFromMatrixPosition(venus.matrixWorld)
+						break
+					case venus:
+						clickedObj = 'venus'
+						var vector = new THREE.Vector3()
+						vector.setFromMatrixPosition(venus.matrixWorld)
 
-				showInfo(2)
+						showInfo(2)
 
-				moveAndLookAt(
-					camera,
-					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
-					{ duration: 1500 }
-				)
+						moveAndLookAt(
+							camera,
+							new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+							new THREE.Vector3(vector.x - 1, vector.y, vector.z),
+							{ duration: 1500 }
+						)
 
-				break
-			case jupiter:
-				clickedObj = 'jupiter'
-				var vector = new THREE.Vector3()
-				vector.setFromMatrixPosition(jupiter.matrixWorld)
+						break
+					case jupiter:
+						clickedObj = 'jupiter'
+						var vector = new THREE.Vector3()
+						vector.setFromMatrixPosition(jupiter.matrixWorld)
 
-				showInfo(3)
+						showInfo(3)
 
-				moveAndLookAt(
-					camera,
-					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
-					{ duration: 1500 }
-				)
+						moveAndLookAt(
+							camera,
+							new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+							new THREE.Vector3(vector.x - 1, vector.y, vector.z),
+							{ duration: 1500 }
+						)
 
-				break
-			case mercury:
-				clickedObj = 'mercury'
-				var vector = new THREE.Vector3()
-				vector.setFromMatrixPosition(mercury.matrixWorld)
+						break
+					case mercury:
+						clickedObj = 'mercury'
+						var vector = new THREE.Vector3()
+						vector.setFromMatrixPosition(mercury.matrixWorld)
 
-				showInfo(4)
+						showInfo(4)
 
-				moveAndLookAt(
-					camera,
-					new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
-					new THREE.Vector3(vector.x - 1, vector.y, vector.z),
-					{ duration: 1500 }
-				)
+						moveAndLookAt(
+							camera,
+							new THREE.Vector3(vector.x, vector.y + 0.5, vector.z + 0.9),
+							new THREE.Vector3(vector.x - 1, vector.y, vector.z),
+							{ duration: 1500 }
+						)
 
-				break
+						break
+				}
+				prevPlanet = currentObj.object.uuid
+			}
 		}
 	}
 }
@@ -971,17 +985,17 @@ const tick = () => {
 			// mars.rotation.x += 0.005
 			mars.rotation.y += 0.005
 			mars.rotation.x += 0.003
-			neptune.rotation.y += 0.01
-			neptune.rotation.x += 0.005
+			neptune.rotation.y += 0.005
+			neptune.rotation.x += 0.003
 
-			venus.rotation.y += 0.01
-			venus.rotation.x += 0.005
+			venus.rotation.y += 0.005
+			venus.rotation.x += 0.003
 
-			jupiter.rotation.y += 0.01
-			jupiter.rotation.x += 0.005
+			jupiter.rotation.y += 0.005
+			jupiter.rotation.x += 0.003
 
-			mercury.rotation.y += 0.01
-			mercury.rotation.x += 0.005
+			mercury.rotation.y += 0.005
+			mercury.rotation.x += 0.003
 		} else {
 			points.rotation.y += 0.001
 			pointsBack.rotation.y += 0.001
@@ -989,42 +1003,57 @@ const tick = () => {
 	} else {
 		currentObj = null
 
-		if (clickedObj === 'mars') {
-			console.log('test mars')
+		// if (clickedObj === 'mars') {
+		// 	console.log('test mars')
+		// 	mars.rotation.y += 0.005
+		// 	mars.rotation.x += 0.003
+		// } else if (clickedObj === 'neptune') {
+		// 	neptune.rotation.y += 0.01
+		// 	neptune.rotation.x += 0.005
+		// } else if (clickedObj === 'venus') {
+		// 	venus.rotation.y += 0.01
+		// 	venus.rotation.x += 0.005
+		// } else if (clickedObj === 'jupiter') {
+		// 	jupiter.rotation.y += 0.01
+		// 	jupiter.rotation.x += 0.005
+		// } else if (clickedObj === 'mercury') {
+		// 	mercury.rotation.y += 0.01
+		// 	mercury.rotation.x += 0.005
+		// }
+		if (clickedObj) {
 			mars.rotation.y += 0.005
 			mars.rotation.x += 0.003
-		} else if (clickedObj === 'neptune') {
-			neptune.rotation.y += 0.01
-			neptune.rotation.x += 0.005
-		} else if (clickedObj === 'venus') {
-			venus.rotation.y += 0.01
-			venus.rotation.x += 0.005
-		} else if (clickedObj === 'jupiter') {
-			jupiter.rotation.y += 0.01
-			jupiter.rotation.x += 0.005
-		} else if (clickedObj === 'mercury') {
-			mercury.rotation.y += 0.01
-			mercury.rotation.x += 0.005
+			neptune.rotation.y += 0.005
+			neptune.rotation.x += 0.003
+
+			venus.rotation.y += 0.005
+			venus.rotation.x += 0.003
+
+			jupiter.rotation.y += 0.005
+			jupiter.rotation.x += 0.003
+
+			mercury.rotation.y += 0.005
+			mercury.rotation.x += 0.003
 		} else {
+			// console.log(clickedObj)
 			// ESTO HACE GIRAR LA GALAXIA *
 			points.rotation.y += 0.002
 			pointsBack.rotation.y += 0.002
 			////////////
 			canvas.style.cursor = 'auto'
-			mars.rotation.y += 0.01
-			mars.rotation.x += 0.005
+			mars.rotation.y += 0.005
+			mars.rotation.x += 0.003
+			neptune.rotation.y += 0.005
+			neptune.rotation.x += 0.003
 
-			neptune.rotation.y += 0.01
-			neptune.rotation.x += 0.005
+			venus.rotation.y += 0.005
+			venus.rotation.x += 0.003
 
-			venus.rotation.y += 0.01
-			venus.rotation.x += 0.005
+			jupiter.rotation.y += 0.005
+			jupiter.rotation.x += 0.003
 
-			jupiter.rotation.y += 0.01
-			jupiter.rotation.x += 0.005
-
-			mercury.rotation.y += 0.01
-			mercury.rotation.x += 0.005
+			mercury.rotation.y += 0.005
+			mercury.rotation.x += 0.003
 		}
 	}
 
