@@ -38,6 +38,10 @@ h1 {
 	transform: translate3d(-150%, 0, 0);
 	transition: 2s all ease-in-out;
 }
+iframe {
+	border-radius: 1vh;
+	border: solid 0.2rem hsla(192, 100%, 50%, 50%);
+}
 .block span {
 	color: white;
 	font-family: Arial;
